@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Find Character In String</title>
+    <style type="text/css">
+
+    #tblcharacter th {
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+   }
+   #tblcharacter tr:nth-child(even){background-color: #f2f2f2;}
+   #tblcharacter td, #tblcharacter th {
+  border: 1px solid #ddd;
+  padding: 8px;
+   }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="Settings.js"></script>
+    <script>
+        
+            function allowAlphaNumericSpace(e) {
+  var code = ('charCode' in e) ? e.charCode : e.keyCode;
+  if (!(code == 32) && // space
+    !(code > 47 && code < 58) && // numeric (0-9)
+    !(code > 64 && code < 91) && // upper alpha (A-Z)
+    !(code > 96 && code < 123)) { // lower alpha (a-z)
+    e.preventDefault();
+  }
+}
+
+        async function getapicharcount() {
+
+            try
+            {
+
+            var inputword = document.getElementById('txtinputword').value;
+            if (inputword == "") {
+                alert("Please Enter Word or Senetnce");
+                document.getElementById('txtinputword').focus();
+                return;
+            }
+            var api_urlcharcount = new URL(Constparturl+"CharacterCount?");
+
+            api_urlcharcount.searchParams.append('inputWord', inputword);
+            api_urlcharcount.searchParams.set('inputWord', inputword);
+            const response = await fetch(api_urlcharcount);
+            var data = await response.json();
+
+            show(data);
+            }
+            catch(e)
+            {
+                alert("Api not Availabe pleae try later");
+            }
+        }
+        function cleardata()
+        {
+            document.getElementById('txtinputword').value="";
+            document.getElementById("tblcharacter").innerHTML=""; 
+            
+        }
+        function show(data) {
+            let tab =
+                `<table border='1'>
+        <tr>
+        <th>Sl.No</th>
+        <th>Character</th>
+        <th>Count</th>
+        </tr>
+        </table>
+        `;
+                var i=0;
+            for (const x of data.charandCount) {
+                 i++;
+
+                tab += `<tr>
+                <td>${i}</td>
+                <td>${x.character} </td>
+                <td>${x.count}</td>
+                </tr>`;
+            }
+
+            document.getElementById("tblcharacter").innerHTML = tab;
+        }
+    </script>
+
+</head>
+
+<body>
+    </br>
+    </br>
+    </br>
+    </br>
+    <div class="container" >
+        <div class="col-md-offset-2 col-md-8">
+            <div class="panel panel-primary" >
+                <div class="panel-heading">Character Count</div>
+                <div class="panel-body">
+
+                    <form>
+                        <div class="form-group row">
+                            <label for="lblinputemail" class="col-md-2 col-form-label">Enter Word or Sentence</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" id="txtinputword"
+                                    placeholder="Enter Word or Sentence" onkeypress="allowAlphaNumericSpace(event)">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary" onclick="getapicharcount();">Find
+                                    </button>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary" onclick="cleardata();">Clear
+                                    </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+
+                    <table id="tblcharacter" class="table table-bordered" ></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
