@@ -22,6 +22,7 @@ namespace CountCharacterTest
             Assert.True(result);
             //hi munu
             //this is a test
+            //this is a jenkins test
 
         }
         [Fact]
